@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -39,7 +40,7 @@ const (
 )
 
 // LiveCardValidator is a card validator that validates real-life cards.
-// It encapsulates a list of validators that are used to validate a card with different criteria.
+// It encapsulates a list of validators that are used to validate a card by different criteria.
 type LiveCardValidator struct {
 	validators []CardValidator
 }
@@ -174,9 +175,11 @@ func NewTestCardValidator() *TestCardValidator {
 	return &TestCardValidator{}
 }
 
+const testCard = "4242424242424242"
+
 func (tcv *TestCardValidator) Validate(card *Card) (bool, string) {
-	if card.Number != "4242424242424242" {
-		return false, "Invalid card number. Must be 4242424242424242"
+	if card.Number != testCard {
+		return false, fmt.Sprint("Invalid card number. Must be ", testCard)
 	}
 
 	return tcv.expirationDateValidator.Validate(card)
