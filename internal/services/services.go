@@ -8,7 +8,7 @@ type Services struct {
 
 type CardValidatorService interface {
 	// ValidateCard validates a card. It returns a ValidateCardOutput that contains the result of the validation.
-	ValidateCard(card *domain.Card, validator domain.CardValidator) (*ValidateCardOutput, error)
+	ValidateCard(card *domain.Card, validatorType domain.CardValidatorType) (*ValidateCardOutput, error)
 }
 
 type ValidateCardOutput struct {

@@ -14,14 +14,14 @@ type validateCardResponseBody struct {
 }
 
 func (h *handler) validateLiveCard(c *gin.Context) {
-	h.validateCard(c, h.logger.Named("validateLiveCard"), domain.NewLiveCardValidator())
+	h.validateCard(c, h.logger.Named("validateLiveCard"), domain.LiveCardValidatorType)
 }
 
 func (h *handler) validateTestCard(c *gin.Context) {
-	h.validateCard(c, h.logger.Named("validateTestCard"), domain.NewTestCardValidator())
+	h.validateCard(c, h.logger.Named("validateTestCard"), domain.TestCardValidatorType)
 }
 
-func (h *handler) validateCard(c *gin.Context, logger logging.Logger, validator domain.CardValidator) {
+func (h *handler) validateCard(c *gin.Context, logger logging.Logger, validatorType domain.CardValidatorType) {
 	var card domain.Card
 	if err := c.ShouldBindJSON(&card); err != nil {
 		logger.Error("failed to bind json", "err", err, "request", c.Request.Body)
@@ -30,7 +30,7 @@ func (h *handler) validateCard(c *gin.Context, logger logging.Logger, validator 
 	}
 	logger = logger.With("card", card)
 
-	output, err := h.services.ValidateCard(&card, validator)
+	output, err := h.services.ValidateCard(&card, validatorType)
 	if err != nil {
 		h.logger.Error("failed to validate card", "err", err)
 		c.JSON(http.StatusInternalServerError, responseError{

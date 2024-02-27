@@ -13,6 +13,31 @@ type CardValidator interface {
 	Validate(card *Card) (bool, string)
 }
 
+type CardValidatorFactory struct{}
+
+func NewCardValidatorFactory() *CardValidatorFactory {
+	return &CardValidatorFactory{}
+}
+
+// CreateCardValidator creates a validator based on the specified type.
+func (vf *CardValidatorFactory) CreateCardValidator(vType CardValidatorType) CardValidator {
+	switch vType {
+	case LiveCardValidatorType:
+		return NewLiveCardValidator()
+	case TestCardValidatorType:
+		return NewTestCardValidator()
+	default:
+		return nil
+	}
+}
+
+type CardValidatorType string
+
+const (
+	LiveCardValidatorType CardValidatorType = "live"
+	TestCardValidatorType CardValidatorType = "test"
+)
+
 // LiveCardValidator is a card validator that validates real-life cards.
 // It encapsulates a list of validators that are used to validate a card with different criteria.
 type LiveCardValidator struct {
