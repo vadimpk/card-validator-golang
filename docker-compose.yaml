@@ -1,0 +1,11 @@
+services:
+  api:
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT: 8080
